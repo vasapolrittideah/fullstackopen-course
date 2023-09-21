@@ -5,7 +5,7 @@ sequenceDiagram
 participant browser
 participant server
 
-      browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note w/ Payload
+      browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note w/ Form Data
       activate server
       server-->>browser: 302 w/ header Location: /exampleapp/notes
       deactivate server
