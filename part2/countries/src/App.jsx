@@ -33,7 +33,7 @@ const Weather = ({ country }) => {
   );
 };
 
-const Result = React.memo(({ country }) => {
+const Country = React.memo(({ country }) => {
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -53,10 +53,36 @@ const Result = React.memo(({ country }) => {
   );
 });
 
+const CountryList = ({ countries, handleShowClick }) => {
+  if (countries.length > 10) {
+    return (
+      <div>
+        <p>Too many matches, specify another filter</p>
+      </div>
+    );
+  }
+
+  if (countries.length === 1) {
+    return <Country country={countries[0]} />;
+  }
+
+  return (
+    <ul>
+      {countries.map((country) => (
+        <li key={country.name.common}>
+          {country.name.common}
+          <button onClick={() => handleShowClick(country.name.common)}>
+            show
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const App = () => {
   const [countries, setCountries] = useState(null);
-  const [filter, setFilter] = useState("");
-  const [shownCountry, setShownCountry] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     axios
@@ -69,54 +95,29 @@ const App = () => {
     return <div>Loading...</div>;
   }
 
-  const handleSearchFieldChange = (event) => {
-    setFilter(event.target.value);
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
   };
 
-  const handleShowButtonClick = (country) => {
-    setShownCountry(country);
-    setFilter("");
+  const handleShowClick = (country) => {
+    setSearch(country);
   };
 
-  const filteredCountries = (() => {
-    if (shownCountry !== "") {
-      return Array(1).fill(
-        countries.find((country) => country.name.common === shownCountry)
-      );
-    }
-
-    return countries.filter((country) =>
-      country.name.common.toLowerCase().includes(filter.toLowerCase())
-    );
-  })();
+  const filteredCountries = countries.filter((country) =>
+    country.name.common.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div>
       <div>
         <span>find countries </span>
-        <input value={filter} onChange={handleSearchFieldChange} />
+        <input value={search} onChange={handleSearchChange} />
       </div>
       <div>
-        {filteredCountries.length > 10 && (
-          <div>Too many matches, specify another filter</div>
-        )}
-        {filteredCountries.length === 1 && (
-          <Result country={filteredCountries[0]} />
-        )}
-        {filteredCountries.length > 1 && filteredCountries.length <= 10 && (
-          <ul>
-            {filteredCountries.map((country) => (
-              <li key={country.name.common}>
-                {country.name.common}
-                <button
-                  onClick={() => handleShowButtonClick(country.name.common)}
-                >
-                  show
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        <CountryList
+          countries={filteredCountries}
+          handleShowClick={handleShowClick}
+        />
       </div>
     </div>
   );
