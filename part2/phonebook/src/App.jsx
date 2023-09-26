@@ -119,20 +119,28 @@ const App = () => {
       number: newNumber,
     };
 
-    personService.createPerson(newPerson).then(() => {
-      setMessage({
-        message: `Added ${newPerson.name}`,
-        type: "message",
+    personService
+      .createPerson(newPerson)
+      .then(() => {
+        setMessage({
+          message: `Added ${newPerson.name}`,
+          type: "message",
+        });
+
+        setTimeout(() => {
+          setMessage({ message: null, type: "" });
+        }, 5000);
+
+        setPersons(persons.concat(newPerson));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        setMessage({
+          message: error.response.data.error,
+          type: "error",
+        });
       });
-
-      setTimeout(() => {
-        setMessage({ message: null, type: "" });
-      }, 5000);
-
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewNumber("");
-    });
   };
 
   const handleNameChange = (event) => {
