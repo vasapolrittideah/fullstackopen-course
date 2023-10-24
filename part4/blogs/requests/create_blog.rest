@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Mzc5ZDM5OTVlNGEyMzU0MmU2MDU4NCIsInVzZXJuYW1lIjoiaGVsbGFzIDEiLCJpYXQiOjE2OTgxNDYwODIsImV4cCI6MTY5ODE0OTY4Mn0.jkwqKNDwU6N3MDGGzUJPPXagVNnHpSa6riiZsOY1AHc
+
+{
+  "title": "New Blog 3",
+  "author": "Mike Wazowski",
+  "url": "www.example.com",
+  "likes": 0
+}
